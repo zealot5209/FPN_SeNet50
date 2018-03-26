@@ -174,6 +174,28 @@ def _get_image_blob(roidb, scale_inds):
 
         ### DATAUG
 
+        ##randomly choose effect
+
+        cfg.TRAIN.DATAUG_DEBUG = True if random.uniform(0, 1) >= 0.5 else False
+        cfg.TRAIN.DATAUG_COLOR = True if random.uniform(0, 1) >= 0.5 else False
+        cfg.TRAIN.DATAUG_RANDOM_PAD = True if random.uniform(0, 1) >= 0.5 else False
+        cfg.TRAIN.DATAUG_RANDOM_CLIP = True if random.uniform(0, 1) >= 0.5 else False
+        cfg.TRAIN.DATAUG_STRETCH = True if random.uniform(0, 1) >= 0.5 else False
+        cfg.TRAIN.DATAUG_SQUARE = True if random.uniform(0, 1) >= 0.5 else False
+        cfg.TRAIN.DATAUG_SQUARE_RANDOM_ALIGN = True if random.uniform(0, 1) >= 0.5 else False
+        cfg.TRAIN.DATAUG_ROTATE = True if random.uniform(0, 1) >= 0.5 else False
+        cfg.TRAIN.DATAUG_VIBO = True if random.uniform(0, 1) >= 0.5 else False
+        print  cfg.TRAIN.DATAUG_DEBUG
+        print  cfg.TRAIN.DATAUG_COLOR
+        print  cfg.TRAIN.DATAUG_RANDOM_PAD
+        print  cfg.TRAIN.DATAUG_RANDOM_CLIP
+        print  cfg.TRAIN.DATAUG_STRETCH
+        print  cfg.TRAIN.DATAUG_SQUARE
+        print  cfg.TRAIN.DATAUG_SQUARE_RANDOM_ALIGN
+        print  cfg.TRAIN.DATAUG_ROTATE
+        print  cfg.TRAIN.DATAUG_VIBO
+
+
         if cfg.TRAIN.DATAUG:
             ### Display
             if cfg.TRAIN.DATAUG_DEBUG:
