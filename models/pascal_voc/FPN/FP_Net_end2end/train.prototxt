@@ -203,6 +203,16 @@ layer {
 	}
 }
 
+#layer {
+#	bottom: "res2a_branch2c"
+#	top: "res2a_branch2c"
+#	name: "scale2a_branch2c"
+#	type: "Scale"
+#	scale_param {
+#		bias_term: true
+#	}
+#}
+
 layer {
 	bottom: "res2a_branch2c"
 	top: "res2a_branch2c"
@@ -213,13 +223,74 @@ layer {
 	}
 }
 
+## SE-2-a ##
 layer {
-	bottom: "res2a_branch1"
-	bottom: "res2a_branch2c"
-	top: "res2a"
-	name: "res2a"
-	type: "Eltwise"
+  name: "conv2_1_global_pool"
+  type: "Pooling"
+  bottom: "res2a_branch2c"
+  top: "conv2_1_global_pool"
+  pooling_param {
+    pool: AVE
+    engine: CAFFE
+    global_pooling: true
+  }
 }
+layer {
+  name: "conv2_1_1x1_down"
+  type: "Convolution"
+  bottom: "conv2_1_global_pool"
+  top: "conv2_1_1x1_down"
+  convolution_param {
+    num_output: 16
+    kernel_size: 1
+    stride: 1
+  }
+}
+layer {
+  name: "conv2_1_1x1_down/relu"
+  type: "ReLU"
+  bottom: "conv2_1_1x1_down"
+  top: "conv2_1_1x1_down"
+}
+layer {
+  name: "conv2_1_1x1_up"
+  type: "Convolution"
+  bottom: "conv2_1_1x1_down"
+  top: "conv2_1_1x1_up"
+  convolution_param {
+    num_output: 256
+    kernel_size: 1
+    stride: 1
+  }
+}
+layer {
+  name: "conv2_1_prob"
+  type: "Sigmoid"
+  bottom: "conv2_1_1x1_up"
+  top: "conv2_1_1x1_up"
+}
+
+layer {
+  name: "res2a"
+  type: "Axpy"
+  bottom: "conv2_1_1x1_up"
+  bottom: "res2a_branch1"
+  bottom: "res2a_branch2c"
+  top: "res2a"
+}
+
+## SE-2-a ! ##
+
+#layer {
+#	bottom: "res2a_branch1"
+#	bottom: "res2a_branch2c"
+#	top: "res2a"
+#	name: "res2a"
+#	type: "Eltwise"
+#}
+
+
+
 
 layer {
 	bottom: "res2a"
@@ -344,13 +415,76 @@ layer {
 	}
 }
 
+
+## SE-2-b ##
 layer {
-	bottom: "res2a"
-	bottom: "res2b_branch2c"
-	top: "res2b"
-	name: "res2b"
-	type: "Eltwise"
+  name: "conv2_2_global_pool"
+  type: "Pooling"
+  bottom: "res2b_branch2c"
+  top: "conv2_2_global_pool"
+  pooling_param {
+    pool: AVE
+    engine: CAFFE
+    global_pooling: true
+  }
 }
+layer {
+  name: "conv2_2_1x1_down"
+  type: "Convolution"
+  bottom: "conv2_2_global_pool"
+  top: "conv2_2_1x1_down"
+  convolution_param {
+    num_output: 16
+    kernel_size: 1
+    stride: 1
+  }
+}
+layer {
+  name: "conv2_2_1x1_down/relu"
+  type: "ReLU"
+  bottom: "conv2_2_1x1_down"
+  top: "conv2_2_1x1_down"
+}
+layer {
+  name: "conv2_2_1x1_up"
+  type: "Convolution"
+  bottom: "conv2_2_1x1_down"
+  top: "conv2_2_1x1_up"
+  convolution_param {
+    num_output: 256
+    kernel_size: 1
+    stride: 1
+  }
+}
+layer {
+  name: "conv2_2_prob"
+  type: "Sigmoid"
+  bottom: "conv2_2_1x1_up"
+  top: "conv2_2_1x1_up"
+}
+
+layer {
+  name: "res2b"
+  type: "Axpy"
+  bottom: "conv2_2_1x1_up"
+  bottom: "res2b_branch2c"
+  bottom: "res2a"
+  top: "res2b"
+}
+
+## SE-2-b !##
+
+#layer {
+#	bottom: "res2a"
+#	bottom: "res2b_branch2c"
+#	top: "res2b"
+#	name: "res2b"
+#	type: "Eltwise"
+#}
+
+
+
+
 
 layer {
 	bottom: "res2b"
@@ -475,13 +609,75 @@ layer {
 	}
 }
 
+## SE-2-c ##
 layer {
-	bottom: "res2b"
-	bottom: "res2c_branch2c"
-	top: "res2c"
-	name: "res2c"
-	type: "Eltwise"
+  name: "conv2_3_global_pool"
+  type: "Pooling"
+  bottom: "res2c_branch2c"
+  top: "conv2_3_global_pool"
+  pooling_param {
+    pool: AVE
+    engine: CAFFE
+    global_pooling: true
+  }
 }
+layer {
+  name: "conv2_3_1x1_down"
+  type: "Convolution"
+  bottom: "conv2_3_global_pool"
+  top: "conv2_3_1x1_down"
+  convolution_param {
+    num_output: 16
+    kernel_size: 1
+    stride: 1
+  }
+}
+layer {
+  name: "conv2_3_1x1_down/relu"
+  type: "ReLU"
+  bottom: "conv2_3_1x1_down"
+  top: "conv2_3_1x1_down"
+}
+layer {
+  name: "conv2_3_1x1_up"
+  type: "Convolution"
+  bottom: "conv2_3_1x1_down"
+  top: "conv2_3_1x1_up"
+  convolution_param {
+    num_output: 256
+    kernel_size: 1
+    stride: 1
+  }
+}
+layer {
+  name: "conv2_3_prob"
+  type: "Sigmoid"
+  bottom: "conv2_3_1x1_up"
+  top: "conv2_3_1x1_up"
+}
+
+layer {
+  name: "res2c"
+  type: "Axpy"
+  bottom: "conv2_3_1x1_up"
+  bottom: "res2c_branch2c"
+  bottom: "res2b"
+  top: "res2c"
+}
+
+
+## SE-2-c !##
+
+
+#layer {
+#	bottom: "res2b"
+#	bottom: "res2c_branch2c"
+#	top: "res2c"
+#	name: "res2c"
+#	type: "Eltwise"
+#}
+
+
 
 layer {
 	bottom: "res2c"
@@ -640,13 +836,72 @@ layer {
 	}
 }
 
+
+## SE-3-a ##
 layer {
-	bottom: "res3a_branch1"
-	bottom: "res3a_branch2c"
-	top: "res3a"
-	name: "res3a"
-	type: "Eltwise"
+  name: "conv3_1_global_pool"
+  type: "Pooling"
+  bottom: "res3a_branch2c"
+  top: "conv3_1_global_pool"
+  pooling_param {
+    pool: AVE
+    engine: CAFFE
+    global_pooling: true
+  }
 }
+layer {
+  name: "conv3_1_1x1_down"
+  type: "Convolution"
+  bottom: "conv3_1_global_pool"
+  top: "conv3_1_1x1_down"
+  convolution_param {
+    num_output: 32
+    kernel_size: 1
+    stride: 1
+  }
+}
+layer {
+  name: "conv3_1_1x1_down/relu"
+  type: "ReLU"
+  bottom: "conv3_1_1x1_down"
+  top: "conv3_1_1x1_down"
+}
+layer {
+  name: "conv3_1_1x1_up"
+  type: "Convolution"
+  bottom: "conv3_1_1x1_down"
+  top: "conv3_1_1x1_up"
+  convolution_param {
+    num_output: 512
+    kernel_size: 1
+    stride: 1
+  }
+}
+
+
+layer {
+  name: "res3a"
+  type: "Axpy"
+  bottom: "conv3_1_1x1_up"
+  bottom: "res3a_branch1"
+  bottom: "res3a_branch2c"
+  top: "res3a"
+}
+
+## SE-3-a !##
+
+
+#layer {
+#	bottom: "res3a_branch1"
+#	bottom: "res3a_branch2c"
+#	top: "res3a"
+#	name: "res3a"
+#	type: "Eltwise"
+#}
+
+
+
+
 
 layer {
 	bottom: "res3a"
@@ -771,13 +1026,72 @@ layer {
 	}
 }
 
+
+## SE-3-b ##
 layer {
-	bottom: "res3a"
-	bottom: "res3b_branch2c"
-	top: "res3b"
-	name: "res3b"
-	type: "Eltwise"
+  name: "conv3_2_global_pool"
+  type: "Pooling"
+  bottom: "res3b_branch2c"
+  top: "conv3_2_global_pool"
+  pooling_param {
+    pool: AVE
+    engine: CAFFE
+    global_pooling: true
+  }
 }
+layer {
+  name: "conv3_2_1x1_down"
+  type: "Convolution"
+  bottom: "conv3_2_global_pool"
+  top: "conv3_2_1x1_down"
+  convolution_param {
+    num_output: 32
+    kernel_size: 1
+    stride: 1
+  }
+}
+layer {
+  name: "conv3_2_1x1_down/relu"
+  type: "ReLU"
+  bottom: "conv3_2_1x1_down"
+  top: "conv3_2_1x1_down"
+}
+layer {
+  name: "conv3_2_1x1_up"
+  type: "Convolution"
+  bottom: "conv3_2_1x1_down"
+  top: "conv3_2_1x1_up"
+  convolution_param {
+    num_output: 512
+    kernel_size: 1
+    stride: 1
+  }
+}
+layer {
+  name: "conv3_2_prob"
+  type: "Sigmoid"
+  bottom: "conv3_2_1x1_up"
+  top: "conv3_2_1x1_up"
+}
+layer {
+  name: "res3b"
+  type: "Axpy"
+  bottom: "conv3_2_1x1_up"
+  bottom: "res3b_branch2c"
+  bottom: "res3a"
+  top: "res3b"
+}
+
+
+## SE-3-b !##
+
+#layer {
+#	bottom: "res3a"
+#	bottom: "res3b_branch2c"
+#	top: "res3b"
+#	name: "res3b"
+#	type: "Eltwise"
+#}
 
 layer {
 	bottom: "res3b"
@@ -902,13 +1216,71 @@ layer {
 	}
 }
 
+## SE-3-c ##
 layer {
-	bottom: "res3b"
-	bottom: "res3c_branch2c"
-	top: "res3c"
-	name: "res3c"
-	type: "Eltwise"
+  name: "conv3_3_global_pool"
+  type: "Pooling"
+  bottom: "res3c_branch2c"
+  top: "conv3_3_global_pool"
+  pooling_param {
+    pool: AVE
+    engine: CAFFE
+    global_pooling: true
+  }
 }
+layer {
+  name: "conv3_3_1x1_down"
+  type: "Convolution"
+  bottom: "conv3_3_global_pool"
+  top: "conv3_3_1x1_down"
+  convolution_param {
+    num_output: 32
+    kernel_size: 1
+    stride: 1
+  }
+}
+layer {
+  name: "conv3_3_1x1_down/relu"
+  type: "ReLU"
+  bottom: "conv3_3_1x1_down"
+  top: "conv3_3_1x1_down"
+}
+layer {
+  name: "conv3_3_1x1_up"
+  type: "Convolution"
+  bottom: "conv3_3_1x1_down"
+  top: "conv3_3_1x1_up"
+  convolution_param {
+    num_output: 512
+    kernel_size: 1
+    stride: 1
+  }
+}
+layer {
+  name: "conv3_3_prob"
+  type: "Sigmoid"
+  bottom: "conv3_3_1x1_up"
+  top: "conv3_3_1x1_up"
+}
+layer {
+  name: "res3c"
+  type: "Axpy"
+  bottom: "conv3_3_1x1_up"
+  bottom: "res3c_branch2c"
+  bottom: "res3b"
+  top: "res3c"
+}
+
+
+## SE-3-c !##
+
+#layer {
+#	bottom: "res3b"
+#	bottom: "res3c_branch2c"
+#	top: "res3c"
+#	name: "res3c"
+#	type: "Eltwise"
+#}
 
 layer {
 	bottom: "res3c"
@@ -1033,13 +1405,71 @@ layer {
 	}
 }
 
+## SE-3-d ##
 layer {
-	bottom: "res3c"
-	bottom: "res3d_branch2c"
-	top: "res3d"
-	name: "res3d"
-	type: "Eltwise"
+  name: "conv3_4_global_pool"
+  type: "Pooling"
+  bottom: "res3d_branch2c"
+  top: "conv3_4_global_pool"
+  pooling_param {
+    pool: AVE
+    engine: CAFFE
+    global_pooling: true
+  }
 }
+layer {
+  name: "conv3_4_1x1_down"
+  type: "Convolution"
+  bottom: "conv3_4_global_pool"
+  top: "conv3_4_1x1_down"
+  convolution_param {
+    num_output: 32
+    kernel_size: 1
+    stride: 1
+  }
+}
+layer {
+  name: "conv3_4_1x1_down/relu"
+  type: "ReLU"
+  bottom: "conv3_4_1x1_down"
+  top: "conv3_4_1x1_down"
+}
+layer {
+  name: "conv3_4_1x1_up"
+  type: "Convolution"
+  bottom: "conv3_4_1x1_down"
+  top: "conv3_4_1x1_up"
+  convolution_param {
+    num_output: 512
+    kernel_size: 1
+    stride: 1
+  }
+}
+layer {
+  name: "conv3_4_prob"
+  type: "Sigmoid"
+  bottom: "conv3_4_1x1_up"
+  top: "conv3_4_1x1_up"
+}
+layer {
+  name: "res3d"
+  type: "Axpy"
+  bottom: "conv3_4_1x1_up"
+  bottom: "res3d_branch2c"
+  bottom: "res3c"
+  top: "res3d"
+}
+
+## SE-3-d !##
+
+
+#layer {
+#	bottom: "res3c"
+#	bottom: "res3d_branch2c"
+#	top: "res3d"
+#	name: "res3d"
+#	type: "Eltwise"
+#}
 
 layer {
 	bottom: "res3d"
