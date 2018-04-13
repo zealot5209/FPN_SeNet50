@@ -1,5 +1,5 @@
-train_net: "models/pascal_voc/FPN/FP_Net_end2end/train.prototxt"
-base_lr: 0.001
+train_net: "/home/yansong/FPN-git-unsky4/models/pascal_voc/FPN/FP_Net_end2end/train.prototxt"
+base_lr: 0.0001
 lr_policy: "step"
 gamma: 0.1
 stepsize: 50000
@@ -10,7 +10,7 @@ momentum: 0.9
 weight_decay: 0.0001
 # We disable standard caffe solver snapshotting and implement our own snapshot
 # function
-snapshot: 0
+snapshot: 2000
 # We still use the snapshot prefix, though
 snapshot_prefix: "fpn"
 iter_size: 2

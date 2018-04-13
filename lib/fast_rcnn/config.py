@@ -33,11 +33,37 @@ cfg = __C
 
 
 
+
 __C.TRAIN = edict()
 
+
+####add for data augment
+__C.TRAIN.DATAUG = True
+__C.TRAIN.DATAUG_DEBUG = True
+__C.TRAIN.DATAUG_COLOR = True
+__C.TRAIN.DATAUG_RANDOM_PAD = True
+__C.TRAIN.DATAUG_RANDOM_PAD_RATIO = 0.1
+__C.TRAIN.DATAUG_RANDOM_CLIP = True
+__C.TRAIN.DATAUG_RANDOM_CLIP_RATIO = 1
+__C.TRAIN.DATAUG_STRETCH = True
+__C.TRAIN.DATAUG_STRETCH_XRATIO  = 1
+__C.TRAIN.DATAUG_STRETCH_YRATIO  = 1
+__C.TRAIN.DATAUG_SQUARE = True
+__C.TRAIN.DATAUG_SQUARE_MAXSIDE  = 1024
+__C.TRAIN.DATAUG_SQUARE_MAXSIDE_OFFSET = 100
+__C.TRAIN.DATAUG_SQUARE_RANDOM_ALIGN  = True
+__C.TRAIN.DATAUG_ROTATE = True
+__C.TRAIN.DATAUG_VIBO = True
+__C.TRAIN.DATAUG_VIBO_RATIO = 1
+
+
+
+####! add for data augment
 # Scales to use during training (can list multiple scales)
 # Each scale is the pixel size of an image's shortest side
 __C.TRAIN.SCALES = (768,)
+#__C.TRAIN.SCALES = (600,)
+
 
 __C.TRAIN.IMAGE_STRIDE = 64
 __C.FPNRATIOS = [0.5,1,2]
@@ -46,7 +72,9 @@ __C.FPNRSCALES = 2 ** np.arange(4,6)
 
 
 # Max pixel size of the longest side of a scaled input image
-__C.TRAIN.MAX_SIZE = 1280
+#__C.TRAIN.MAX_SIZE = 1280
+__C.TRAIN.MAX_SIZE = 768
+#__C.TRAIN.MAX_SIZE = 800
 
 # Images to use per minibatch
 __C.TRAIN.IMS_PER_BATCH = 2
@@ -66,7 +94,7 @@ __C.TRAIN.BG_THRESH_HI = 0.5
 __C.TRAIN.BG_THRESH_LO = 0.0
 
 # Use horizontally-flipped images during training?
-__C.TRAIN.USE_FLIPPED = True
+__C.TRAIN.USE_FLIPPED = False
 
 # Train bounding-box regressors
 __C.TRAIN.BBOX_REG = True

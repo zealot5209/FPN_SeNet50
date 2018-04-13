@@ -360,10 +360,11 @@ def apply_nms(all_boxes, thresh):
             nms_boxes[cls_ind][im_ind] = dets[keep, :].copy()
     return nms_boxes
 
-def test_net(net, imdb, max_per_image=100, thresh=0.05, vis=False):
+def test_net(net, imdb, max_per_image=1000, thresh=0.05, vis=False):
     """Test a Fast R-CNN network on an image database."""
   
     num_images = len(imdb.image_index)
+    print 'num_images', num_images
     # all detections are collected into:
     #    all_boxes[cls][image] = N x 5 array of detections in
     #    (x1, y1, x2, y2, score)
@@ -397,6 +398,7 @@ def test_net(net, imdb, max_per_image=100, thresh=0.05, vis=False):
 
         _t['misc'].tic()
         vis = False
+        #vis = True
         if  vis:
             imj =im
             name = 'output/bads/'+ str(i) + '.jpg'
@@ -430,7 +432,11 @@ def test_net(net, imdb, max_per_image=100, thresh=0.05, vis=False):
                             text = str(jj) + ": " + str(scorej)
                             font = cv2.FONT_HERSHEY_SIMPLEX
                             cv2.putText(imj, text, (x1, y1),font , 1, (0,0,255), 4)
+            print '=============='
+            print name
+            print '=============='
             cv2.imwrite(name, imj)
+            print 'finished'
             #aaa
         # skip j = 0, because it's the background class
         for j in xrange(1, imdb.num_classes):

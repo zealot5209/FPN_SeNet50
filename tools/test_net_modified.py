@@ -18,7 +18,7 @@
 """Test a Fast R-CNN network on an image database."""
 import _init_paths
 from fast_rcnn.config import cfg, cfg_from_file, cfg_from_list
-from datasets.factory import get_imdb/home/yansong/FPN-git-unsky2/models/pascal_voc/FPN/FP_Net_end2end/
+from datasets.factory import get_imdb
 from fast_rcnn.test import im_detect, test_net
 
 from lib.fast_rcnn.nms_wrapper import nms
@@ -40,6 +40,13 @@ CLASSES = ('__background__',
            'motorbike', 'person', 'pottedplant',
            'sheep', 'sofa', 'train', 'tvmonitor')
 
+color_dict = {}
+
+
+def init_colors(CLASSES):
+    for cls_ind, cls in enumerate(CLASSES[1:]):
+        colors = [255*np.random.rand(), 255*np.random.rand(), 255*np.random.rand()]
+        color_dict[cls] = colors
 
 
 def parse_args():
@@ -54,7 +61,7 @@ def parse_args():
                         default='/home/yansong/FPN-git-unsky2/models/pascal_voc/FPN/FP_Net_end2end/test.prototxt', type=str)
     parser.add_argument('--net', dest='caffemodel',
                         help='model to test',
-                        default='/home/yansong/FPN-git-unsky2/output/FP_Net_end2end/voc_2007_trainval/fpn_iter_60000.caffemodel', type=str)
+                        default='/home/yansong/FPN-git-unsky2/output/FP_Net_end2end/voc_2007_trainval/fpn_iter_50000.caffemodel', type=str)
     parser.add_argument('--cfg', dest='cfg_file',
                         help='optional config file', default='/home/yansong/FPN-git-unsky2/experiments/cfgs/FP_Net_end2end.yml', type=str)
     parser.add_argument('--wait', dest='wait',
@@ -118,9 +125,11 @@ def vis_detections(new_bboxes, result, class_name, dets, thresh=0.5):
     inds = np.where(dets[:, -1] >= thresh)[0]
     if len(inds) == 0:
         return
-    r1 = 255*np.random.rand()
-    r2 = 255*np.random.rand()
-    r3 = 255*np.random.rand()
+
+    colors = color_dict[class_name]
+    r1 = colors[0]
+    r2 = colors[1]
+    r3 = colors[2]
     for i in inds:
         bbox = dets[i, :4]
         score = dets[i, -1]
@@ -139,8 +148,8 @@ def vis_detections(new_bboxes, result, class_name, dets, thresh=0.5):
         cv2.rectangle(result, (bbox[0], bbox[3]), (bbox[2], bbox[1]), (r1, r2, r3), 2)
 
         print '==========='
-        print (bbox[0], bbox[3])
-        print (bbox[2], bbox[1])
+        print (bbox[0], bbox[1])
+        print (bbox[2], bbox[3])
         print '=========='
 
         rec = np.array([[bbox[0], bbox[1]], [bbox[0] + 70, bbox[1]], [bbox[0] + 70, bbox[1] + 16], [bbox[0], bbox[1] + 16]])
@@ -169,6 +178,7 @@ def demo(net, image_name):
     #    print " --- ERROR: Cannot Load Image: ", im_file
     #    return False
 
+    print 'image name:', image_name
     result = im__
 
     # Detect all object classes and regress object bounds
@@ -217,8 +227,12 @@ def demo(net, image_name):
     #plt.draw()
     #return True
 
+
 if __name__ == '__main__':
     args = parse_args()
+
+    #initiate box colors
+    init_colors(CLASSES)
 
     print('Called with args:')
     print(args)

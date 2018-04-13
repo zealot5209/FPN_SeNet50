@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <vector>
-
+#include <iostream>
 #include "caffe/layers/relu_layer.hpp"
 
 namespace caffe {
@@ -19,6 +19,7 @@ void ReLULayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
   const Dtype* bottom_data = bottom[0]->gpu_data();
   Dtype* top_data = top[0]->mutable_gpu_data();
   const int count = bottom[0]->count();
+  LOG(INFO) << "@ReLULayer forward_gpu";
   Dtype negative_slope = this->layer_param_.relu_param().negative_slope();
   // NOLINT_NEXT_LINE(whitespace/operators)
   ReLUForward<Dtype><<<CAFFE_GET_BLOCKS(count), CAFFE_CUDA_NUM_THREADS>>>(

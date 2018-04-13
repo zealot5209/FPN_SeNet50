@@ -7,6 +7,7 @@ namespace caffe {
 template <typename Dtype>
 void ConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top) {
+  LOG(INFO) << "@ConvolutionLayer forward_gpu";
   const Dtype* weight = this->blobs_[0]->gpu_data();
   // cout<<"--------------------------------------"<<endl;
   // cout<<"caffe caffe layer："<<endl;

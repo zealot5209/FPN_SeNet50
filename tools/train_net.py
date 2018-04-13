@@ -27,7 +27,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Train a Fast R-CNN network')
     parser.add_argument('--gpu', dest='gpu_id',
                         help='GPU device id to use [0]',
-                        default=0, type=int)
+                        default=1, type=int)
     parser.add_argument('--solver', dest='solver',
                         help='solver prototxt',
                         default=None, type=str)
@@ -82,12 +82,15 @@ if __name__ == '__main__':
     print('Called with args:')
     print(args)
 
+
+
     if args.cfg_file is not None:
         cfg_from_file(args.cfg_file)
     if args.set_cfgs is not None:
         cfg_from_list(args.set_cfgs)
 
     cfg.GPU_ID = args.gpu_id
+
 
     print('Using config:')
     pprint.pprint(cfg)
@@ -110,3 +113,5 @@ if __name__ == '__main__':
     train_net(args.solver, roidb, output_dir,
               pretrained_model=args.pretrained_model,
               max_iters=args.max_iters)
+
+

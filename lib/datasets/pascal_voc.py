@@ -28,11 +28,11 @@ class pascal_voc(imdb):
                             else devkit_path
         self._data_path = os.path.join(self._devkit_path, 'VOC' + self._year)
         self._classes = ('__background__', # always index 0
-                         'aeroplane', 'bicycle', 'bird', 'boat',
-                         'bottle', 'bus', 'car', 'cat', 'chair',
-                         'cow', 'diningtable', 'dog', 'horse',
-                         'motorbike', 'person', 'pottedplant',
-                         'sheep', 'sofa', 'train', 'tvmonitor')
+                         'hammerhead', 'boxing', 'barber_scissors', 'spray',
+                         'hammer', 'slingshot', 'blade', 'plumb', 'knife_toy',
+                         'knife_tile', 'plastic_scissors', 'kitchen_knife', 'gun',
+                         'scissors', 'fullfold_knife', 'knife_edge',
+                         'saw', 'blunt', 'knife', 'open_scissors')
         self._class_to_ind = dict(zip(self.classes, xrange(self.num_classes)))
         self._image_ext = '.jpg'
         self._image_index = self._load_image_set_index()
@@ -96,18 +96,18 @@ class pascal_voc(imdb):
 
         This function loads/saves from/to a cache file to speed up future calls.
         """
-        cache_file = os.path.join(self.cache_path, self.name + '_gt_roidb.pkl')
-        if os.path.exists(cache_file):
-            with open(cache_file, 'rb') as fid:
-                roidb = cPickle.load(fid)
-            print '{} gt roidb loaded from {}'.format(self.name, cache_file)
-            return roidb
+        # cache_file = os.path.join(self.cache_path, self.name + '_gt_roidb.pkl')
+        # if os.path.exists(cache_file):
+        #     with open(cache_file, 'rb') as fid:
+        #         roidb = cPickle.load(fid)
+        #     print '{} gt roidb loaded from {}'.format(self.name, cache_file)
+        #     return roidb
 
         gt_roidb = [self._load_pascal_annotation(index)
                     for index in self.image_index]
-        with open(cache_file, 'wb') as fid:
-            cPickle.dump(gt_roidb, fid, cPickle.HIGHEST_PROTOCOL)
-        print 'wrote gt roidb to {}'.format(cache_file)
+        # with open(cache_file, 'wb') as fid:
+        #     cPickle.dump(gt_roidb, fid, cPickle.HIGHEST_PROTOCOL)
+        # print 'wrote gt roidb to {}'.format(cache_file)
 
         return gt_roidb
 
@@ -209,7 +209,9 @@ class pascal_voc(imdb):
             y1 = float(bbox.find('ymin').text) - 1
             x2 = float(bbox.find('xmax').text) - 1
             y2 = float(bbox.find('ymax').text) - 1
+
             cls = self._class_to_ind[obj.find('name').text.lower().strip()]
+
             boxes[ix, :] = [x1, y1, x2, y2]
             gt_classes[ix] = cls
             overlaps[ix, cls] = 1.0
@@ -280,9 +282,13 @@ class pascal_voc(imdb):
             if cls == '__background__':
                 continue
             filename = self._get_voc_results_file_template().format(cls)
+
+
             rec, prec, ap = voc_eval(
                 filename, annopath, imagesetfile, cls, cachedir, ovthresh=0.5,
                 use_07_metric=use_07_metric)
+
+
             aps += [ap]
             print('AP for {} = {:.4f}'.format(cls, ap))
             with open(os.path.join(output_dir, cls + '_pr.pkl'), 'w') as f:

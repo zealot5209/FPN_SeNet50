@@ -1,4 +1,5 @@
-ge:
+#/bin/bash
+#ge:
 # ./experiments/scripts/faster_rcnn_end2end.sh GPU NET DATASET [options args to {train,test}_net.py]
 # DATASET is either pascal_voc or coco.
 #
@@ -49,10 +50,19 @@ esac
 NET_FINAL="./data/pretrained_model/ResNet50.v2.caffemodel"
 
 
+# time ./tools/test_net.py --gpu ${GPU_ID} \
+#   --def models/${PT_DIR}/${NET}/FP_Net_end2end/test.prototxt \
+#   --net output/FP_Net_end2end/voc_2007_trainval/fpn_iter_60000.caffemodel \
+#   --imdb ${TEST_IMDB} \
+#   --cfg experiments/cfgs/FP_Net_end2end.yml \
+#   ${EXTRA_ARGS}
+
+#time ./tools/test_net.py --gpu ${GPU_ID} \
 time ./tools/test_net.py --gpu ${GPU_ID} \
-  --def models/${PT_DIR}/${NET}/FP_Net_end2end/test.prototxt \
-  --net output/FP_Net_end2end/voc_2007_trainval/fpn_iter_60000.caffemodel \
+  --def /home/yansong/FPN-git-unsky4/models/pascal_voc/FPN/FP_Net_end2end/test.prototxt \
+  --net /home/yansong/FPN-git-unsky4/data/pretrained_model/fpn_SeNet_iter_32000.caffemodel \
   --imdb ${TEST_IMDB} \
-  --cfg experiments/cfgs/FP_Net_end2end.yml \
+  --cfg /home/yansong/FPN-git-unsky4/experiments/cfgs/FP_Net_end2end.yml \
   ${EXTRA_ARGS}
+
 

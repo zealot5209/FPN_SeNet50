@@ -48,12 +48,29 @@ LOG="experiments/logs/faster_rcnn_end2end_${NET}_${EXTRA_ARGS_SLUG}.txt.`date +'
 exec &> >(tee -a "$LOG")
 echo Logging output to "$LOG"
 
+# time ./tools/train_net.py --gpu ${GPU_ID} \
+#   --solver models/${PT_DIR}/${NET}/FP_Net_end2end/solver.prototxt \
+#   --weights data/pretrained_model/ResNet50.v2.caffemodel \
+#   #--weights data/pretrained_model/VGG16.v2.caffemodel \
+#   --imdb ${TRAIN_IMDB} \
+#   --iters ${ITERS} \
+#   --cfg experiments/cfgs/FP_Net_end2end.yml \
+#   ${EXTRA_ARGS}
+
+# time ./tools/train_net.py --gpu ${GPU_ID} \
+#   --solver /home/yansong/FPN-git-unsky2/models/pascal_voc/FPN/FP_Net_end2end/solver.prototxt \
+#   --weights /home/yansong/FPN-git-unsky2/data/pretrained_model/ResNet50.v2.caffemodel \
+#   --imdb ${TRAIN_IMDB} \
+#   --iters ${ITERS} \
+#   --cfg /home/yansong/FPN-git-unsky2/experiments/cfgs/FP_Net_end2end.yml \
+#   ${EXTRA_ARGS}
+
 time ./tools/train_net.py --gpu ${GPU_ID} \
-  --solver models/${PT_DIR}/${NET}/FP_Net_end2end/solver.prototxt \
-  --weights data/pretrained_model/ResNet50.v2.caffemodel \
+  --solver /home/yansong/FPN-git-unsky2/models/pascal_voc/FPN/FP_Net_end2end/solver_res18.prototxt \
+  --weights /home/yansong/FPN-git-unsky2/data/pretrained_model/ResNet18.v2.caffemodel \
   --imdb ${TRAIN_IMDB} \
   --iters ${ITERS} \
-  --cfg experiments/cfgs/FP_Net_end2end.yml \
+  --cfg /home/yansong/FPN-git-unsky2/experiments/cfgs/FP_Net_end2end.yml \
   ${EXTRA_ARGS}
 
 set +x
@@ -66,3 +83,9 @@ time ./tools/test_net.py --gpu ${GPU_ID} \
   --imdb ${TEST_IMDB} \
   --cfg experiments/cfgs/FP_Net_end2end.yml \
   ${EXTRA_ARGS}
+
+
+
+
+
+

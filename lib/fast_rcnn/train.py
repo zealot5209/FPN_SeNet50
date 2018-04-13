@@ -136,7 +136,9 @@ def filter_roidb(roidb):
 def train_net(solver_prototxt, roidb, output_dir,
               pretrained_model=None, max_iters=40000):
     """Train a Fast R-CNN network."""
-
+    print '==============='
+    print 'max_iters',max_iters
+    print '==============='
     roidb = filter_roidb(roidb)
   
     sw = SolverWrapper(solver_prototxt, roidb, output_dir,
